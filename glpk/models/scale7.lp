@@ -1,6 +1,6 @@
 \* Problem: Scale 7 - Hospital *\
 
-Maximize
+Minimize
  z: + 1.75 x1 + 1.5 x2 + 1.25 x3 + x4 + x5 + x6 + x7 + x8 + 1.25 x9
  + 1.5 x10 + 1.75 x11
 

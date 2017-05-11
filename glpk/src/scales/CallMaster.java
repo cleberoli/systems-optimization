@@ -128,7 +128,7 @@ public class CallMaster {
 
             // Define objective
             GLPK.glp_set_obj_name(lp, "z");
-            GLPK.glp_set_obj_dir(lp, GLPKConstants.GLP_MAX);
+            GLPK.glp_set_obj_dir(lp, GLPKConstants.GLP_MIN);
             GLPK.glp_set_obj_coef(lp, 0, 0);
 
             for (int i = 1; i <= numberVariables; i++) {
