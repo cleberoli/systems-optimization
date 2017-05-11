@@ -146,7 +146,7 @@ public class College {
             // Retrieve solution
             if (ret == 0) {
                 GLPKUtil.write_lp_solution(lp,"transportation10.sol");
-                //GLPK.glp_write_sol(lp, "transportation1023.sol");
+                GLPK.glp_write_sol(lp, "transportation1023.sol");
             } else {
                 System.out.println("The problem could not be solved");
             }
