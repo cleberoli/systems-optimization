@@ -16,7 +16,7 @@ import org.gnu.glpk.*;
 // x13 - x35 - x36 = 0
 // x14 - x46 - x47 = 0
 // x25 + x35 + x65 - x58 = 0
-// x26 + x36 + x46 - x67 = 0
+// x26 + x36 + x46 - x65 - x67 -x68 = 0
 // x47 + x67 - x78 = 0
 // x58 + x68 + x78 = 1
 // where,
@@ -55,7 +55,7 @@ public class Roads {
                 {0,1,0,0,0,-1,-1,0,0,0,0,0,0,0},
                 {0,0,1,0,0,0,0,0,-1,-1,0,0,0,0},
                 {0,0,0,1,0,1,0,0,0,-1,1,0,0,0},
-                {0,0,0,0,1,0,1,1,0,0,0,-1,0,0},
+                {0,0,0,0,1,0,1,1,0,0,-1,-1,-1,0},
                 {0,0,0,0,0,0,0,0,1,0,0,1,0,-1},
                 {0,0,0,0,0,0,0,0,0,1,0,0,1,1}};
         double[] bounds = {-1,0,0,0,0,0,0,1};
@@ -72,7 +72,7 @@ public class Roads {
 
             for (int i = 1; i <= numberVariables; i++) {
                 GLPK.glp_set_col_name(lp, i, variables[i-1]);
-                GLPK.glp_set_col_kind(lp, i, GLPKConstants.GLP_IV);
+                GLPK.glp_set_col_kind(lp, i, GLPKConstants.GLP_BV);
                 GLPK.glp_set_col_bnds(lp, i, GLPKConstants.GLP_LO, 0, 0);
             }
 
