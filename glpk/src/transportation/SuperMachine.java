@@ -65,7 +65,7 @@ public class SuperMachine {
                 {0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0},
                 {0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0},
                 {0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}};
-        double[] bounds = {-1,-1,-1,-1,1,1,1,1,1};
+        double[] bounds = {-2,-2,-2,-2,1,1,1,1,1};
         double[] coefficients = {14,5,8,7,9,2,12,6,5,7,7,8,3,9,7,2,4,6,10,6};
 
         try {
@@ -93,7 +93,7 @@ public class SuperMachine {
             GLPK.glp_add_rows(lp, numberConstraints);
 
             // Set row details
-            GLPKUtil.set_up_constraints(lp, ind, val, bounds,constraints, 1, numberConstraints, numberVariables);
+            GLPKUtil.set_lo_constraints(lp, ind, val, bounds,constraints, 1, numberConstraints, numberVariables);
 
             // Free memory
             GLPK.delete_intArray(ind);
@@ -109,7 +109,7 @@ public class SuperMachine {
             }
 
             // Write model to file
-            GLPK.glp_write_lp(lp, null, "transportation8.lp");
+            GLPK.glp_write_lp(lp, null, "transportation8b.lp");
 
             // Solve model
             parm = new glp_smcp();
@@ -118,8 +118,8 @@ public class SuperMachine {
 
             // Retrieve solution
             if (ret == 0) {
-                GLPKUtil.write_lp_solution(lp,"transportation8.sol");
-                //GLPK.glp_write_sol(lp, "transportation8.sol");
+                GLPKUtil.write_lp_solution(lp,"transportation8b.sol");
+                //GLPK.glp_write_sol(lp, "transportation8b.sol");
             } else {
                 System.out.println("The problem could not be solved");
             }
