@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/glpk/glpk.iml" filepath="$PROJECT_DIR$/glpk/glpk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lp/lp.iml" filepath="$PROJECT_DIR$/lp/lp.iml" />
       <module fileurl="file://$PROJECT_DIR$/systems-optimization.iml" filepath="$PROJECT_DIR$/systems-optimization.iml" />
     </modules>
   </component>
