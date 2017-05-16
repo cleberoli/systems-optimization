@@ -26,8 +26,8 @@ public class Input {
 				{salad,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
 		
 		// the lines corresponding to the optimization function and the money restriction should not be multiplied
-		for (int i = 2; i <= Matrix.RESTRICTIONS; i++) {
-			for (int j = 0; j <= Matrix.VARIABLES; j++) {
+		for (int i = 2; i <= initialMatrix.getConstraints(); i++) {
+			for (int j = 0; j <= initialMatrix.getVariables(); j++) {
 				upperMatrix[i][j] = (upperMatrix[i][j] == 0) ? 0 : -upperMatrix[i][j];
 			}
 		}

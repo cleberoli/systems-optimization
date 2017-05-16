@@ -21,7 +21,7 @@ public class MatrixSolution {
       double [][] upperMatrix = matrix.getUpperMatrix();
    	
    	// Procura por outros elementos negativos, fora o elemento do F(x) e membro livre, na primeira coluna.
-      for (int i = 1; i <= Matrix.RESTRICTIONS; i++) {
+      for (int i = 1; i <= matrix.getConstraints(); i++) {
       	
          impossibleSolution = false;
       	
@@ -30,11 +30,11 @@ public class MatrixSolution {
             impossibleSolution = true;
          	
          	// Ao encontrar o negativo, verificar se os demais elementos da mesma linha sao todos positivos.
-            for (int j = 1; j <= Matrix.VARIABLES; j++) {
+            for (int j = 1; j <= matrix.getVariables(); j++) {
                if (upperMatrix[i][j] < 0) {
                   impossibleSolution = false;
-                  j = Matrix.VARIABLES + 1;
-                  i = Matrix.RESTRICTIONS + 1;
+                  j = matrix.getVariables() + 1;
+                  i = matrix.getConstraints() + 1;
                	
                }
             	
@@ -42,7 +42,7 @@ public class MatrixSolution {
          	
             // finalizar for 
             if(impossibleSolution) 
-               i = Matrix.RESTRICTIONS + 1;
+               i = matrix.getConstraints() + 1;
          	
          }
       	
@@ -60,20 +60,20 @@ public class MatrixSolution {
       double [][] upperMatrix = matrix.getUpperMatrix();
    	
    	// Verificar se todos os coeficientes na primeira coluna, além do membro livre, são positivos
-      for (int i = 1; i <= Matrix.RESTRICTIONS; i++) {
+      for (int i = 1; i <= matrix.getConstraints(); i++) {
          if (upperMatrix[i][0] < 0) {
             multipleSolutions = false;
-            i = Matrix.RESTRICTIONS + 1;
+            i = matrix.getConstraints() + 1;
          }
       }
    	
    	// Verificar se todos os coeficientes na primeira fila, além do membro livre, são não positivos
       if (multipleSolutions) {
       	
-         for (int i = 1; i <= Matrix.VARIABLES; i++) {
+         for (int i = 1; i <= matrix.getVariables(); i++) {
             if (upperMatrix[0][i] > 0) {
                multipleSolutions = false;
-               i = Matrix.VARIABLES + 1;
+               i = matrix.getVariables() + 1;
             }
          }
       }
@@ -82,10 +82,10 @@ public class MatrixSolution {
       if (multipleSolutions) {
          multipleSolutions = false;
       	
-         for (int i = 1; i <= Matrix.VARIABLES; i++) {
+         for (int i = 1; i <= matrix.getVariables(); i++) {
             if (upperMatrix[0][i] == 0) {
                multipleSolutions = true;
-               i = Matrix.VARIABLES + 1;
+               i = matrix.getVariables() + 1;
             }
          }
       }
@@ -108,20 +108,20 @@ public class MatrixSolution {
    	
    	// Verificar se todos os coeficientes na primeira coluna, menos do membro livre, são positivos 
       // se nao, acusar que nao e otima
-      for (int i = 1; i <= Matrix.RESTRICTIONS; i++) {
+      for (int i = 1; i <= matrix.getConstraints(); i++) {
          if (upperMatrix[i][0] < 0) {
             optimalSolution = false;
-            i = Matrix.RESTRICTIONS + 1;
+            i = matrix.getConstraints() + 1;
          }
       }
    	
    	// Verificar se todos os coeficientes da primeira linha, além do membro livre, são negativos
       // para acusar que nao e otima
       if (optimalSolution) {
-         for (int i = 1; i <= Matrix.VARIABLES; i++) {
+         for (int i = 1; i <= matrix.getVariables(); i++) {
             if (upperMatrix[0][i] >= 0) {
                optimalSolution = false;
-               i = Matrix.VARIABLES + 1;
+               i = matrix.getVariables() + 1;
             }
          }
       }
@@ -138,33 +138,33 @@ public class MatrixSolution {
       double [][] upperMatrix = matrix.getUpperMatrix();
    	
    	// Verificar se todos os coeficientes na primeira coluna, além do membro livre, são positivos
-      for (int i = 1; i <= Matrix.RESTRICTIONS; i++) {
+      for (int i = 1; i <= matrix.getConstraints(); i++) {
          if (upperMatrix[i][0] < 0) {
             unlimitedSolution = false;
-            i = Matrix.RESTRICTIONS + 1;
+            i = matrix.getConstraints() + 1;
          }
       }
    	
       if (unlimitedSolution) {
       	
       	// Procura um coeficiente positivo na primeira fila, além do membro livre
-         for (int i = 1; i <= Matrix.VARIABLES; i++) {
+         for (int i = 1; i <= matrix.getVariables(); i++) {
             unlimitedSolution = false;
          	
             if (upperMatrix[0][i] >= 0) {
                unlimitedSolution = true;
             	
             	// Verificar se todos os outros coeficientes dessa coluna são negativos
-               for (int j = 1; j <= Matrix.VARIABLES; j++) {
+               for (int j = 1; j <= matrix.getVariables(); j++) {
                   if (upperMatrix[j][i] >= 0) {
                      unlimitedSolution = false;
-                     j = Matrix.VARIABLES + 1;
-                     i = Matrix.VARIABLES + 1;
+                     j = matrix.getVariables() + 1;
+                     i = matrix.getVariables() + 1;
                   }
                }
             	
                if (unlimitedSolution) 
-                  i = Matrix.VARIABLES + 1;
+                  i = matrix.getVariables() + 1;
             	
             }
          }

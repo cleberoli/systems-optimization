@@ -15,8 +15,7 @@ public class Node implements Comparable<Node> {
 		this.value = parent.value;
 	}
 	
-	
 	public int compareTo(Node other) {
-		return (int)(other.height - this.height);
+		return (other.height - this.height);
 	}
 }

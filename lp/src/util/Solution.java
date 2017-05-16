@@ -15,7 +15,7 @@ public class Solution {
 		nf.setMaximumFractionDigits(2);            
 		nf.setGroupingUsed(false);
 		
-		for (int i = 1; i <= Matrix.RESTRICTIONS; i++) {
+		for (int i = 1; i <= simplex.getMatrix().getConstraints(); i++) {
 			if (indexRows[i].charAt(0) == 'x')
 				if (simplex.getMatrix().getUpperMatrix()[i][0] > 0) {
 					total += simplex.getMatrix().getUpperMatrix()[i][0]*Converter.getPrice(Integer.parseInt(indexRows[i].substring(1)));

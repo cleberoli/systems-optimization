@@ -18,10 +18,10 @@ public class MatrixPhase {
       double [][] upperMatrix = matrix.getUpperMatrix();
    	
    	// Procura um elemento negativo na primeira coluna fora o membro livre
-      for (int i = 1; i <= Matrix.RESTRICTIONS; i++) {		
+      for (int i = 1; i <= matrix.getConstraints(); i++) {
          if (upperMatrix[i][0] < 0) {
             firstPhase = true;
-            i = Matrix.RESTRICTIONS + 1;
+            i = matrix.getConstraints() + 1;
          }
       }
    	
@@ -39,10 +39,10 @@ public class MatrixPhase {
          double [][] upperMatrix = matrix.getUpperMatrix();
       	
       	// look for a positive coefficient on the first row, besides the free member
-         for (int i = 1; i <= Matrix.VARIABLES; i++) {		
+         for (int i = 1; i <= matrix.getVariables(); i++) {
             if (upperMatrix[0][i] >= 0) {
                secondPhase = true;
-               i = Matrix.VARIABLES + 1;
+               i = matrix.getVariables() + 1;
             }
          }
       }

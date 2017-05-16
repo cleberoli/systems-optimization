@@ -24,7 +24,7 @@ public class Simplex {
 	public Simplex(Matrix matrix) {
 		this.matrix = matrix;
 		this.rows = matrix.getRows();
-		this.columns = matrix.getCollumns();
+		this.columns = matrix.getColumns();
 	}
 	
    /*
@@ -73,10 +73,13 @@ public class Simplex {
    */
 	private void phaseOne() {
 		while(MatrixPhase.isFirstPhase(matrix) && !MatrixSolution.isImpossibleSolution(matrix)) {
-			SimplexOperations.findPermissibleColumnOne(this);
-			SimplexOperations.findPivot(this);
-			SimplexOperations.generateNewMatrix(this);
-			this.switchVaribales();
+			for (int i = 0; i < matrix.getColumns(); i++) {
+				if (SimplexOperations.isPermissibleColumnOne(this, i)) {
+					SimplexOperations.findPivot(this);
+					SimplexOperations.generateNewMatrix(this);
+					this.switchVaribales();
+				}
+			}
 		}
 	}
 	
@@ -88,10 +91,13 @@ public class Simplex {
    */
 	private void phaseTwo() {
 		while(MatrixPhase.isSecondPhase(matrix) && !MatrixSolution.isMultipleSolutions(matrix) && !MatrixSolution.isOptimalSolution(matrix) && !MatrixSolution.isUnlimitedSolution(matrix)) {
-			SimplexOperations.findPermissibleColumnTwo(this);
-			SimplexOperations.findPivot(this);
-			SimplexOperations.generateNewMatrix(this);
-			this.switchVaribales();
+			for (int i = 0; i < matrix.getColumns(); i++) {
+				if (SimplexOperations.isPermissibleColumnTwo(this, i)) {
+					SimplexOperations.findPivot(this);
+					SimplexOperations.generateNewMatrix(this);
+					this.switchVaribales();
+				}
+			}
 		}
 	}
 	

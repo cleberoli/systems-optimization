@@ -16,31 +16,62 @@ public class SimplexOperations {
    * A coluna desse segundo elemento encontrado sera a permissivel.
    */
    public static void findPermissibleColumnOne(Simplex simplex) {
-      for (int i = 1; i <= Matrix.RESTRICTIONS; i++) {
+      for (int i = 1; i <= simplex.getMatrix().getConstraints(); i++) {
          if (simplex.getMatrix().getUpperMatrix()[i][0] < 0) {
-            for (int j = 1; j<= Matrix.VARIABLES; j++) {
+            for (int j = 1; j<= simplex.getMatrix().getVariables(); j++) {
                if (simplex.getMatrix().getUpperMatrix()[i][j] < 0) {
                   simplex.setPermissiveColumn(j);
-                  j = Matrix.VARIABLES + 1;
-                  i = Matrix.RESTRICTIONS + 1;
+                  j = simplex.getMatrix().getVariables() + 1;
+                  i = simplex.getMatrix().getConstraints() + 1;
                }
             }
          }
       }
    }
+
+   public static boolean isPermissibleColumnOne(Simplex simplex, int column) {
+      for (int i = 1; i <= simplex.getMatrix().getConstraints(); i++) {
+         if (simplex.getMatrix().getUpperMatrix()[i][0] < 0) {
+            for (int j = 1; j<= simplex.getMatrix().getVariables(); j++) {
+               if (simplex.getMatrix().getUpperMatrix()[i][j] < 0) {
+                  if (j == column) {
+                      simplex.setPermissiveColumn(j);
+                      return true;
+                  }
+               }
+            }
+         }
+      }
+
+      return false;
+   }
+
 	/*
    * Metodo responsavel por definir na segunda etapa do simplex, qual sera a coluna permissivel.   
    * Percorre a primeira linha para encontrar o primeiro elemento positivo.
    * A coluna do elemento positivo encontrado sera a proxima coluna permissivel.
    */
    public static void findPermissibleColumnTwo(Simplex simplex) {
-      for (int j = 1; j<= Matrix.VARIABLES; j++) {
+      for (int j = 1; j<= simplex.getMatrix().getVariables(); j++) {
          if (simplex.getMatrix().getUpperMatrix()[0][j] > 0) {
             simplex.setPermissiveColumn(j);
-            j = Matrix.VARIABLES + 1;
+            j = simplex.getMatrix().getVariables() + 1;
          }
       }
    }
+
+    public static boolean isPermissibleColumnTwo(Simplex simplex, int column) {
+        for (int j = 1; j<= simplex.getMatrix().getVariables(); j++) {
+            if (simplex.getMatrix().getUpperMatrix()[0][j] > 0) {
+                if (j == column) {
+                    simplex.setPermissiveColumn(j);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 	
    /*
    * Metodo responsavel por definir elemento permissivel da matriz do simplex.   
@@ -52,7 +83,7 @@ public class SimplexOperations {
       double temp = 0;
       int row = -1;
    	
-      for (int i = 1; i <= Matrix.RESTRICTIONS; i++) {
+      for (int i = 1; i <= simplex.getMatrix().getConstraints(); i++) {
          // A divisao pode ser realizada apenas se os dois elementos possuirem sinais iguais e diferentes de zero.
          // Caso algum dos elemento nao se adequar as restricoes a divisao pode ser descartada.
          if (!((simplex.getMatrix().getUpperMatrix()[i][0] < 0 && simplex.getMatrix().getUpperMatrix()[i][simplex.getPermissiveColumn()] > 0) ||
@@ -84,8 +115,8 @@ public class SimplexOperations {
       Matrix newMatrix = new Matrix();
       double [][] newUpperMatrix = newMatrix.getUpperMatrix();
    	
-      for (int i = 0; i <= Matrix.RESTRICTIONS; i++) {
-         for (int j = 0; j <= Matrix.VARIABLES; j++) {
+      for (int i = 0; i <= simplex.getMatrix().getConstraints(); i++) {
+         for (int j = 0; j <= simplex.getMatrix().getVariables(); j++) {
             if ((i == simplex.getPermissiveRow()) || (j == simplex.getPermissiveColumn()))
                newUpperMatrix[i][j] = simplex.getMatrix().getLowerMatrix()[i][j];
             else
@@ -116,14 +147,14 @@ public class SimplexOperations {
    	
       lowerMatrix[simplex.getPermissiveRow()][simplex.getPermissiveColumn()] = inversePivot;
    	
-      for (int j = 0; j <= Matrix.VARIABLES; j++) {
+      for (int j = 0; j <= simplex.getMatrix().getVariables(); j++) {
          if (j != simplex.getPermissiveColumn()) {
             // preenchimento da linha permissivel da matriz inferior ( elemento superior * 1/pivo)
             lowerMatrix[simplex.getPermissiveRow()][j] = (upperMatrix[simplex.getPermissiveRow()][j] == 0) ? 0 : upperMatrix[simplex.getPermissiveRow()][j]*inversePivot;
          }
       }
    	
-      for (int i = 0; i <= Matrix.RESTRICTIONS; i++) {
+      for (int i = 0; i <= simplex.getMatrix().getConstraints(); i++) {
          if (i != simplex.getPermissiveRow()) {
             // preenchimento da coluna permissivel da matriz inferior (elemento superior * - 1/pivo)
             lowerMatrix[i][simplex.getPermissiveColumn()] = (upperMatrix[i][simplex.getPermissiveColumn()] == 0) ? 0 : -upperMatrix[i][simplex.getPermissiveColumn()]*inversePivot;
@@ -131,8 +162,8 @@ public class SimplexOperations {
       }
    	
       // preenchimento das demais posicoes distintas da coluna ou linha permissivel
-      for (int i = 0; i <= Matrix.RESTRICTIONS; i++) {
-         for (int j = 0; j <= Matrix.VARIABLES; j++) {
+      for (int i = 0; i <= simplex.getMatrix().getConstraints(); i++) {
+         for (int j = 0; j <= simplex.getMatrix().getVariables(); j++) {
             if ((i != simplex.getPermissiveRow()) && (j != simplex.getPermissiveColumn())) {
                lowerMatrix[i][j] = ((upperMatrix[simplex.getPermissiveRow()][j] == 0) || (lowerMatrix[i][simplex.getPermissiveColumn()] == 0)) ? 0 : upperMatrix[simplex.getPermissiveRow()][j]*lowerMatrix[i][simplex.getPermissiveColumn()];
             }

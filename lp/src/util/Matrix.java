@@ -3,22 +3,24 @@ package util;
 import java.text.NumberFormat;
 
 public class Matrix {
-	
-	public static final int VARIABLES = 50;
-	public static final int RESTRICTIONS = 6;
+
+	private int variables;
+	private int constraints;
 	
 	private double [][] lowerMatrix;
 	private double [][] upperMatrix;
 	
 	private int rows;
-	private int collumns;
+	private int columns;
 	
 	public Matrix() {
-		rows = RESTRICTIONS + 1;
-		collumns = VARIABLES + 1;
+	    variables = 50;
+	    constraints = 6;
+        rows = constraints + 1;
+        columns = variables + 1;
 		
-		lowerMatrix = new double[rows][collumns];
-		upperMatrix = new double[rows][collumns];
+		lowerMatrix = new double[rows][columns];
+		upperMatrix = new double[rows][columns];
 	}
 
 	public double[][] getLowerMatrix() {
@@ -45,31 +47,47 @@ public class Matrix {
 		this.rows = rows;
 	}
 
-	public int getCollumns() {
-		return collumns;
+	public int getColumns() {
+		return columns;
 	}
 
-	public void setCollumns(int collumns) {
-		this.collumns = collumns;
+	public void setColumns(int columns) {
+		this.columns = columns;
 	}
 
-	@Override
+    public int getVariables() {
+        return variables;
+    }
+
+    public void setVariables(int variables) {
+        this.variables = variables;
+    }
+
+    public int getConstraints() {
+        return constraints;
+    }
+
+    public void setConstraints(int constraints) {
+        this.constraints = constraints;
+    }
+
+    @Override
 	public String toString() {
 		NumberFormat nf = NumberFormat.getInstance();
 		nf.setMaximumFractionDigits(2);            
 		nf.setGroupingUsed(false);
 		
 		String matrix = "==================== Upper Matrix ===================\n";
-		for (int i = 0; i <= Matrix.RESTRICTIONS; i++) {
-			for (int j = 0; j <= Matrix.VARIABLES; j++) {
+		for (int i = 0; i <= constraints; i++) {
+			for (int j = 0; j <= variables; j++) {
 				matrix += nf.format(upperMatrix[i][j]) + "\t";
 			}
 			 matrix += "\n";
 		}
 		
 		matrix += "==================== Lower Matrix ====================\n";
-		for (int i = 0; i <= Matrix.RESTRICTIONS; i++) {
-			for (int j = 0; j <= Matrix.VARIABLES; j++) {
+		for (int i = 0; i <= constraints; i++) {
+			for (int j = 0; j <= variables; j++) {
 				matrix += nf.format(lowerMatrix[i][j]) + "\t";
 			}
 			 matrix += "\n";
