@@ -1,6 +1,7 @@
 package util;
 
 import java.text.NumberFormat;
+import java.util.Arrays;
 
 import simplex.Simplex;
 

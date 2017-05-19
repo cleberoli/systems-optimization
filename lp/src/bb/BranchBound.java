@@ -5,12 +5,13 @@ import util.Matrix;
 import util.Node;
 import util.Solution;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.PriorityQueue;
 
 public class BranchBound {
 
-    private static final int HEIGHT = 5;
+    private static final int HEIGHT = 2;
 
     private Matrix matrix;
     private Simplex simplex;
@@ -23,6 +24,8 @@ public class BranchBound {
     }
 
     public Simplex runBranchBound() {
+        Simplex original = this.simplex.clone();
+        System.out.println(this.simplex.getMatrix());
         Simplex s = simplex.runSimplexForSimplex();
         int integerSolution = testForIntegerSolutions(Solution.getArraySolutionFromMatrix(s));
         double bestValue = Solution.getArraySolutionFromMatrix(s)[0];
@@ -30,33 +33,60 @@ public class BranchBound {
         if (integerSolution == 0)
             System.out.println("sucesso");
         else {
-            Node root = new Node(bestValue, s);
+            Node root = new Node(bestValue, original);
             Node best = root;
+            best.best = Double.NEGATIVE_INFINITY;
             queue.offer(root);
-            System.out.println(root.simplex.getMatrix());
 
             while (!queue.isEmpty()) {
+                System.out.println("inicio do while " + queue.size());
                 Node node = queue.poll();
-                Simplex newSimplex = node.simplex.runSimplexForSimplex();
-                Simplex newSimplex2 = newSimplex.clone();
+                original = node.simplex.clone();
+                System.out.println("acabei de tirar");
+                System.out.println(original.getMatrix());
+                Simplex newSimplex = original.clone();
+                System.out.println("clonei");
+                newSimplex.setIndexRows(node.simplex.getIndexRows());
+                System.out.println(Arrays.toString(node.simplex.getIndexRows()));
+                newSimplex = newSimplex.runSimplexForSimplex();
+                System.out.println("newSimplexIndex "+Arrays.toString(newSimplex.getIndexRows()));
+                System.out.println("fiz simplex");
+                System.out.println(newSimplex.getMatrix());
+                Simplex newSimplex2, newSimplex3;
                 int integerIndex = testForIntegerSolutions(Solution.getArraySolutionFromMatrix(newSimplex));
 
+                System.out.println("index "+integerIndex);
                 if (integerIndex == 0) {
-                    if (Solution.getArraySolutionFromMatrix(newSimplex)[0] > best.best)
+                    System.out.println(Solution.getArraySolutionFromMatrix(newSimplex)[0]);
+                    System.out.println(best.best);
+                    if (best.best == Double.NEGATIVE_INFINITY)
                         best = new Node(Solution.getArraySolutionFromMatrix(newSimplex)[0], newSimplex, node.height);
+                    else if (Solution.getArraySolutionFromMatrix(newSimplex)[0] > best.best) {
+                        System.out.println("BEST");
+                        System.out.println(newSimplex.getMatrix());
+                        best = new Node(Solution.getArraySolutionFromMatrix(newSimplex)[0], newSimplex, node.height);
+                    }
                 } else {
+                    System.out.println("ELSE");
                     if (node.height < HEIGHT) {
+                        System.out.println("HEIGHT");
+                        newSimplex3 = original.clone();
+                        newSimplex2 = original.clone();
                         double lower = Math.floor(Solution.getArraySolutionFromMatrix(newSimplex)[integerIndex]);
                         double upper = Math.ceil(Solution.getArraySolutionFromMatrix(newSimplex)[integerIndex]);
-                        Node lowerBound = new Node(node, newSimplex.addConstraintLT(integerIndex, lower));
+                        Node lowerBound = new Node(node, newSimplex3.addConstraintLT(integerIndex, lower));
                         Node upperBound = new Node(node, newSimplex2.addConstraintGT(integerIndex, upper));
 
                         queue.offer(lowerBound);
                         System.out.println(lowerBound.simplex.getMatrix());
+                        System.out.println(Arrays.toString(lowerBound.simplex.getIndexRows()));
                         queue.offer(upperBound);
                         System.out.println(upperBound.simplex.getMatrix());
+                        System.out.println(Arrays.toString(upperBound.simplex.getIndexRows()));
                     }
                 }
+
+                System.out.println("fim do while " + queue.size());
             }
 
             if (testForIntegerSolutions(Solution.getArraySolutionFromMatrix(best.simplex)) == 0) {
@@ -67,7 +97,6 @@ public class BranchBound {
                 System.out.println(Arrays.toString(Solution.getArraySolutionFromMatrix(best.simplex)));
             }
         }
-
 
         return null;
     }

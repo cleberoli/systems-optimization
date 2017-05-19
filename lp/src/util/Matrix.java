@@ -23,6 +23,16 @@ public class Matrix {
 		upperMatrix = new double[rows][columns];
 	}
 
+	public Matrix(double[][] upperMatrix) {
+		constraints = upperMatrix.length - 1;
+		variables = upperMatrix[0].length - 1;
+		rows = constraints + 1;
+		columns = variables + 1;
+
+		this.upperMatrix = upperMatrix;
+		lowerMatrix = new double[rows][columns];
+	}
+
 	public Matrix(int variables, int constraints) {
 	    this.variables = variables;
 	    this.constraints = constraints;
@@ -133,7 +143,7 @@ public class Matrix {
     @Override
 	public String toString() {
 		NumberFormat nf = NumberFormat.getInstance();
-		nf.setMaximumFractionDigits(2);            
+		nf.setMaximumFractionDigits(5);
 		nf.setGroupingUsed(false);
 		
 		String matrix = "==================== Upper Matrix ===================\n";

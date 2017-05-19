@@ -146,7 +146,7 @@ public class Simplex {
         this.setMatrix(newMatrix);
 		this.setIndexRows(newIndexRows);
 
-        return this;
+		return this;
     }
 	
    /*
@@ -156,13 +156,13 @@ public class Simplex {
    */
 	private void phaseOne() {
 		while(MatrixPhase.isFirstPhase(matrix) && !MatrixSolution.isImpossibleSolution(matrix)) {
-			for (int i = 0; i < matrix.getColumns(); i++) {
-				if (SimplexOperations.isPermissibleColumnOne(this, i)) {
+
+				SimplexOperations.findPermissibleColumnOne(this);
 					SimplexOperations.findPivot(this);
 					SimplexOperations.generateNewMatrix(this);
 					this.switchVaribales();
-				}
-			}
+
+
 		}
 	}
 	
@@ -174,13 +174,11 @@ public class Simplex {
    */
 	private void phaseTwo() {
 		while(MatrixPhase.isSecondPhase(matrix) && !MatrixSolution.isMultipleSolutions(matrix) && !MatrixSolution.isOptimalSolution(matrix) && !MatrixSolution.isUnlimitedSolution(matrix)) {
-			for (int i = 0; i < matrix.getColumns(); i++) {
-				if (SimplexOperations.isPermissibleColumnTwo(this, i)) {
+			SimplexOperations.findPermissibleColumnTwo(this);
 					SimplexOperations.findPivot(this);
 					SimplexOperations.generateNewMatrix(this);
 					this.switchVaribales();
-				}
-			}
+
 		}
 	}
 	
@@ -190,6 +188,9 @@ public class Simplex {
    */
 	private void switchVaribales() {
 		String temp = indexColumns[permissiveColumn];
+		System.out.println(matrix.getConstraints());
+		System.out.println(matrix.getRows());
+		System.out.println(permissiveRow);
 		indexColumns[permissiveColumn] = indexRows[permissiveRow];
 	    indexRows[permissiveRow] = temp;
 	}
