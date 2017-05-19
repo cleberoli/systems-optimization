@@ -23,7 +23,26 @@ public class Matrix {
 		upperMatrix = new double[rows][columns];
 	}
 
-	public double[][] getLowerMatrix() {
+	public Matrix(int variables, int constraints) {
+	    this.variables = variables;
+	    this.constraints = constraints;
+	    rows = constraints + 1;
+	    columns = variables + 1;
+
+	    lowerMatrix = new double[rows][columns];
+	    upperMatrix = new double[rows][columns];
+    }
+
+    public Matrix(int variables, int constraints, double[][] lowerMatrix, double[][] upperMatrix, int rows, int columns) {
+        this.variables = variables;
+        this.constraints = constraints;
+        this.lowerMatrix = lowerMatrix;
+        this.upperMatrix = upperMatrix;
+        this.rows = rows;
+        this.columns = columns;
+    }
+
+    public double[][] getLowerMatrix() {
 		return lowerMatrix;
 	}
 
@@ -71,6 +90,46 @@ public class Matrix {
         this.constraints = constraints;
     }
 
+    public void addConstraintGT(int variable, double value) {
+		double[][] newUppermatrix = new double[rows+1][columns];
+		double[][] newLowermatrix = new double[rows+1][columns];
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				newUppermatrix[i][j] = upperMatrix[i][j];
+			}
+		}
+
+		newUppermatrix[rows][0] = -value;
+		newUppermatrix[rows][variable] = -1;
+
+		constraints++;
+		rows++;
+
+		setUpperMatrix(newUppermatrix);
+		setLowerMatrix(newLowermatrix);
+	}
+
+    public void addConstraintLT(int variable, double value) {
+        double[][] newUppermatrix = new double[rows+1][columns];
+		double[][] newLowermatrix = new double[rows+1][columns];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                newUppermatrix[i][j] = upperMatrix[i][j];
+            }
+        }
+
+        newUppermatrix[rows][0] = value;
+        newUppermatrix[rows][variable] = 1;
+
+        constraints++;
+        rows++;
+
+        setUpperMatrix(newUppermatrix);
+        setLowerMatrix(newLowermatrix);
+    }
+
     @Override
 	public String toString() {
 		NumberFormat nf = NumberFormat.getInstance();
@@ -85,15 +144,19 @@ public class Matrix {
 			 matrix += "\n";
 		}
 		
-		matrix += "==================== Lower Matrix ====================\n";
+/*		matrix += "==================== Lower Matrix ====================\n";
 		for (int i = 0; i <= constraints; i++) {
 			for (int j = 0; j <= variables; j++) {
 				matrix += nf.format(lowerMatrix[i][j]) + "\t";
 			}
 			 matrix += "\n";
-		}
+		}*/
 		
 		return matrix;
-	}	
-	
+	}
+
+    @Override
+    public Matrix clone() {
+        return new Matrix(variables,constraints,lowerMatrix,upperMatrix,rows,columns);
+    }
 }

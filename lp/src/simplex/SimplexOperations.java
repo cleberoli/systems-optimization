@@ -112,9 +112,9 @@ public class SimplexOperations {
    public static void generateNewMatrix(Simplex simplex) {
       fillLowerMatrix(simplex);
    	
-      Matrix newMatrix = new Matrix();
+      Matrix newMatrix = new Matrix(simplex.getMatrix().getVariables(), simplex.getMatrix().getConstraints());
       double [][] newUpperMatrix = newMatrix.getUpperMatrix();
-   	
+
       for (int i = 0; i <= simplex.getMatrix().getConstraints(); i++) {
          for (int j = 0; j <= simplex.getMatrix().getVariables(); j++) {
             if ((i == simplex.getPermissiveRow()) || (j == simplex.getPermissiveColumn()))

@@ -3,6 +3,8 @@ package simplex;
 import util.Matrix;
 import util.Solution;
 
+import java.util.Arrays;
+
 /*
 * Classe responsavel por unir os calculos das demais classes para executar o simplex. 
 * Responsavel tambem por classificar as matrizes como Solucao Otima, Impossivel, Multiplas Solucoes e Ilimitada.
@@ -26,14 +28,18 @@ public class Simplex {
 		this.rows = matrix.getRows();
 		this.columns = matrix.getColumns();
 	}
-	
+
+	public Simplex() {
+
+    }
+
    /*
    * Metodo que executa todas as partes separadas formando o simplex
    * Faz verificacao inicial se matriz e impossivel. Se nao, executa primeira parte do simplex,
    * identifica se a matriz gerada na primeira etapa do simplex ja possui algum tipo de classificacao. 
    * Caso nao, executa a segunda parte do algoritmo do simplex procurando novamente a classificacao da matriz fina.
    */
-	public String runSimplex() {		
+	public String runSimplexForResult() {
 		if (MatrixSolution.isImpossibleSolution(matrix))
 			return "Impossible Solution";
 		else {
@@ -45,19 +51,25 @@ public class Simplex {
 			if (MatrixSolution.isMultipleSolutions(matrix))
 				return "Multiple Solutions@" + Solution.getSolutionFromMatrix(this);
 			
-			if (MatrixSolution.isOptimalSolution(matrix))
-				return "Optimal Solution@" + Solution.getSolutionFromMatrix(this);
+			if (MatrixSolution.isOptimalSolution(matrix)) {
+                System.out.println(Arrays.toString(Solution.getArraySolutionFromMatrix(this)));
+                return "Optimal Solution@" + Solution.getSolutionFromMatrix(this);
+            }
 			
 			if (MatrixSolution.isUnlimitedSolution(matrix))
 				return "Unlimited Solution";
 			
 			phaseTwo();
 			
-			if (MatrixSolution.isMultipleSolutions(matrix))
-				return "Multiple Solutions@" + Solution.getSolutionFromMatrix(this);
+			if (MatrixSolution.isMultipleSolutions(matrix)) {
+                System.out.println(Arrays.toString(Solution.getArraySolutionFromMatrix(this)));
+                return "Multiple Solutions@" + Solution.getSolutionFromMatrix(this);
+            }
 			
-			if (MatrixSolution.isOptimalSolution(matrix))
-				return "Optimal Solution@" +  Solution.getSolutionFromMatrix(this);
+			if (MatrixSolution.isOptimalSolution(matrix)) {
+                System.out.println(Arrays.toString(Solution.getArraySolutionFromMatrix(this)));
+                return "Optimal Solution@" + Solution.getSolutionFromMatrix(this);
+            }
 			
 			if (MatrixSolution.isUnlimitedSolution(matrix))
 				return "Unlimited Solution";
@@ -65,6 +77,77 @@ public class Simplex {
 		
 		return "Error!";
 	}
+
+	public Simplex runSimplexForSimplex() {
+		if (MatrixSolution.isImpossibleSolution(matrix))
+			System.out.println("Impossible Solution");
+		else {
+			phaseOne();
+
+			if (MatrixSolution.isImpossibleSolution(matrix))
+				System.out.println("Impossible Solution");
+
+			if (MatrixSolution.isMultipleSolutions(matrix)) {
+                System.out.println("Multiple Solution " + Arrays.toString(Solution.getArraySolutionFromMatrix(this)));
+                return this;
+            }
+
+			if (MatrixSolution.isOptimalSolution(matrix)) {
+				System.out.println("Optimal Solution " + Arrays.toString(Solution.getArraySolutionFromMatrix(this)));
+				return this;
+			}
+
+			if (MatrixSolution.isUnlimitedSolution(matrix))
+				System.out.println("Unlimited Solution");
+
+			phaseTwo();
+
+			if (MatrixSolution.isMultipleSolutions(matrix)) {
+				System.out.println("Multiple Solution " + Arrays.toString(Solution.getArraySolutionFromMatrix(this)));
+				return this;
+			}
+
+			if (MatrixSolution.isOptimalSolution(matrix)) {
+				System.out.println("Optimal Solution " + Arrays.toString(Solution.getArraySolutionFromMatrix(this)));
+				return this;
+			}
+
+			if (MatrixSolution.isUnlimitedSolution(matrix))
+				System.out.println("Unlimited Solution");
+		}
+
+		return this;
+	}
+
+	public Simplex addConstraintLT(int variable, double value) {
+	    Matrix newMatrix = this.getMatrix();
+        newMatrix.addConstraintLT(variable, value);
+		String[] newIndexRows = new String[newMatrix.getConstraints() + 1];
+		newIndexRows[0] = "fx";
+
+		for (int i = 1; i < newIndexRows.length; i++)
+			newIndexRows[i] = "y" + i;
+
+	    this.setMatrix(newMatrix);
+		this.setIndexRows(newIndexRows);
+
+	    return this;
+    }
+
+    public Simplex addConstraintGT(int variable, double value) {
+        Matrix newMatrix = this.getMatrix();
+        newMatrix.addConstraintGT(variable, value);
+		String[] newIndexRows = new String[newMatrix.getConstraints()+1];
+		newIndexRows[0] = "fx";
+
+		for (int i = 1; i < newIndexRows.length; i++)
+			newIndexRows[i] = "y" + i;
+
+        this.setMatrix(newMatrix);
+		this.setIndexRows(newIndexRows);
+
+        return this;
+    }
 	
    /*
    * Metodo que executa a primeira parte do algoritmo do simplex : apos o preenchimento da matriz encontrar coluna, linha 
@@ -169,4 +252,9 @@ public class Simplex {
 		this.indexRows = indexRows;
 	}
 
+    @Override
+    public Simplex clone() {
+	    Simplex s = new Simplex(this.getMatrix().clone());
+	    return s;
+    }
 }

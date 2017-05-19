@@ -1,3 +1,4 @@
+import bb.BranchBound;
 import simplex.Simplex;
 import util.Input;
 import util.Matrix;
@@ -8,12 +9,15 @@ public class Main {
         Matrix matrix = Input.initializeMatrix(money, calories, breakfast, dessert, hamburger, salad);
         Simplex s = new Simplex(matrix);
 
-        String[] solution = s.runSimplex().split("@");
+        BranchBound bb = new BranchBound(s);
+        bb.runBranchBound();
+
+/*        String[] solution = s.runSimplexForResult().split("@");
         int solutionSize = solution.length;
 
         for (int i = 0; i < solutionSize; i++) {
             System.out.println(solution[i]);
-        }
+        }*/
     }
 
     public static void main(String[] args) {
