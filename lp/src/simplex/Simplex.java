@@ -29,15 +29,13 @@ public class Simplex {
 		this.columns = matrix.getColumns();
 	}
 
-	public Simplex() {
-
-    }
 
    /*
    * Metodo que executa todas as partes separadas formando o simplex
    * Faz verificacao inicial se matriz e impossivel. Se nao, executa primeira parte do simplex,
    * identifica se a matriz gerada na primeira etapa do simplex ja possui algum tipo de classificacao. 
    * Caso nao, executa a segunda parte do algoritmo do simplex procurando novamente a classificacao da matriz fina.
+   * Retorna uma String de resultado
    */
 	public String runSimplexForResult() {
 		if (MatrixSolution.isImpossibleSolution(matrix))
@@ -78,6 +76,13 @@ public class Simplex {
 		return "Error!";
 	}
 
+	/*
+   * Metodo que executa todas as partes separadas formando o simplex
+   * Faz verificacao inicial se matriz e impossivel. Se nao, executa primeira parte do simplex,
+   * identifica se a matriz gerada na primeira etapa do simplex ja possui algum tipo de classificacao.
+   * Caso nao, executa a segunda parte do algoritmo do simplex procurando novamente a classificacao da matriz fina.
+   * Retorna um objeto do tipo Simplex
+   */
 	public Simplex runSimplexForSimplex() {
 		if (MatrixSolution.isImpossibleSolution(matrix))
 			System.out.println("Impossible Solution");
@@ -119,12 +124,19 @@ public class Simplex {
 		return this;
 	}
 
+	/**
+	 * Adiciona uma restrição do tipo menor ou igual ao objeto
+	 * @param variable variável sobre a qual age a restrição
+	 * @param value valor sob o qual a variável está restrits
+	 * @return objeto Simplex com as novas restrições
+	 */
 	public Simplex addConstraintLT(int variable, double value) {
 	    Matrix newMatrix = this.getMatrix();
         newMatrix.addConstraintLT(variable, value);
 		String[] newIndexRows = new String[newMatrix.getConstraints() + 1];
 		newIndexRows[0] = "fx";
 
+		// atualiza array de indexes
 		for (int i = 1; i < newIndexRows.length; i++)
 			newIndexRows[i] = "y" + i;
 
@@ -134,12 +146,19 @@ public class Simplex {
 	    return this;
     }
 
+	/**
+	 * Adiciona uma restrição do tipo maior ou igual ao objeto
+	 * @param variable variável sobre a qual age a restrição
+	 * @param value valor sob o qual a variável está restrits
+	 * @return objeto Simplex com as novas restrições
+	 */
     public Simplex addConstraintGT(int variable, double value) {
         Matrix newMatrix = this.getMatrix();
         newMatrix.addConstraintGT(variable, value);
 		String[] newIndexRows = new String[newMatrix.getConstraints()+1];
 		newIndexRows[0] = "fx";
 
+		// atualiza array de indexes
 		for (int i = 1; i < newIndexRows.length; i++)
 			newIndexRows[i] = "y" + i;
 
@@ -156,13 +175,10 @@ public class Simplex {
    */
 	private void phaseOne() {
 		while(MatrixPhase.isFirstPhase(matrix) && !MatrixSolution.isImpossibleSolution(matrix)) {
-
-				SimplexOperations.findPermissibleColumnOne(this);
-					SimplexOperations.findPivot(this);
-					SimplexOperations.generateNewMatrix(this);
-					this.switchVaribales();
-
-
+			SimplexOperations.findPermissibleColumnOne(this);
+			SimplexOperations.findPivot(this);
+			SimplexOperations.generateNewMatrix(this);
+			this.switchVaribales();
 		}
 	}
 	
@@ -175,10 +191,9 @@ public class Simplex {
 	private void phaseTwo() {
 		while(MatrixPhase.isSecondPhase(matrix) && !MatrixSolution.isMultipleSolutions(matrix) && !MatrixSolution.isOptimalSolution(matrix) && !MatrixSolution.isUnlimitedSolution(matrix)) {
 			SimplexOperations.findPermissibleColumnTwo(this);
-					SimplexOperations.findPivot(this);
-					SimplexOperations.generateNewMatrix(this);
-					this.switchVaribales();
-
+			SimplexOperations.findPivot(this);
+			SimplexOperations.generateNewMatrix(this);
+			this.switchVaribales();
 		}
 	}
 	
@@ -188,9 +203,6 @@ public class Simplex {
    */
 	private void switchVaribales() {
 		String temp = indexColumns[permissiveColumn];
-		System.out.println(matrix.getConstraints());
-		System.out.println(matrix.getRows());
-		System.out.println(permissiveRow);
 		indexColumns[permissiveColumn] = indexRows[permissiveRow];
 	    indexRows[permissiveRow] = temp;
 	}

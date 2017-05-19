@@ -29,23 +29,6 @@ public class SimplexOperations {
       }
    }
 
-   public static boolean isPermissibleColumnOne(Simplex simplex, int column) {
-      for (int i = 1; i <= simplex.getMatrix().getConstraints(); i++) {
-         if (simplex.getMatrix().getUpperMatrix()[i][0] < 0) {
-            for (int j = 1; j<= simplex.getMatrix().getVariables(); j++) {
-               if (simplex.getMatrix().getUpperMatrix()[i][j] < 0) {
-                  if (j == column) {
-                      simplex.setPermissiveColumn(j);
-                      return true;
-                  }
-               }
-            }
-         }
-      }
-
-      return false;
-   }
-
 	/*
    * Metodo responsavel por definir na segunda etapa do simplex, qual sera a coluna permissivel.   
    * Percorre a primeira linha para encontrar o primeiro elemento positivo.
@@ -59,19 +42,6 @@ public class SimplexOperations {
          }
       }
    }
-
-    public static boolean isPermissibleColumnTwo(Simplex simplex, int column) {
-        for (int j = 1; j<= simplex.getMatrix().getVariables(); j++) {
-            if (simplex.getMatrix().getUpperMatrix()[0][j] > 0) {
-                if (j == column) {
-                    simplex.setPermissiveColumn(j);
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
 	
    /*
    * Metodo responsavel por definir elemento permissivel da matriz do simplex.   

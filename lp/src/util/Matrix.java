@@ -100,19 +100,28 @@ public class Matrix {
         this.constraints = constraints;
     }
 
+	/**
+	 * Adiciona uma restrição do tipo maior ou igual ao objeto
+	 * @param variable variável sobre a qual age a restrição
+	 * @param value valor sob o qual a variável está restrits
+	 * @return objeto Simplex com as novas restrições
+	 */
     public void addConstraintGT(int variable, double value) {
 		double[][] newUppermatrix = new double[rows+1][columns];
 		double[][] newLowermatrix = new double[rows+1][columns];
 
+		// copia matriz anterior
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
 				newUppermatrix[i][j] = upperMatrix[i][j];
 			}
 		}
 
+		// adiciona novos valores
 		newUppermatrix[rows][0] = -value;
 		newUppermatrix[rows][variable] = -1;
 
+		// atualiza variáveis de controle
 		constraints++;
 		rows++;
 
@@ -120,19 +129,28 @@ public class Matrix {
 		setLowerMatrix(newLowermatrix);
 	}
 
+	/**
+	 * Adiciona uma restrição do tipo menor ou igual ao objeto
+	 * @param variable variável sobre a qual age a restrição
+	 * @param value valor sob o qual a variável está restrits
+	 * @return objeto Simplex com as novas restrições
+	 */
     public void addConstraintLT(int variable, double value) {
         double[][] newUppermatrix = new double[rows+1][columns];
 		double[][] newLowermatrix = new double[rows+1][columns];
 
+		// copia matriz anterior
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 newUppermatrix[i][j] = upperMatrix[i][j];
             }
         }
 
+		// adiciona novos valores
         newUppermatrix[rows][0] = value;
         newUppermatrix[rows][variable] = 1;
 
+		// atualiza variáveis de controle
         constraints++;
         rows++;
 
@@ -154,13 +172,13 @@ public class Matrix {
 			 matrix += "\n";
 		}
 		
-/*		matrix += "==================== Lower Matrix ====================\n";
+		matrix += "==================== Lower Matrix ====================\n";
 		for (int i = 0; i <= constraints; i++) {
 			for (int j = 0; j <= variables; j++) {
 				matrix += nf.format(lowerMatrix[i][j]) + "\t";
 			}
 			 matrix += "\n";
-		}*/
+		}
 		
 		return matrix;
 	}

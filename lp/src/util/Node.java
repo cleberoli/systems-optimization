@@ -7,11 +7,6 @@ public class Node implements Comparable<Node> {
 	public int height;
 	public double best;
 	public Simplex simplex;
-
-	public Node() {
-		best = 0;
-		height = -1;
-	}
 	
 	public Node(Node parent, Simplex simplex) {
 		this.height = parent.height + 1;
@@ -33,5 +28,10 @@ public class Node implements Comparable<Node> {
 	
 	public int compareTo(Node other) {
 		return (other.height - this.height);
+	}
+
+	@Override
+	public String toString() {
+		return simplex.getMatrix().toString();
 	}
 }

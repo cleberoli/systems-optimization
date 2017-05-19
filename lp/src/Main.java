@@ -11,21 +11,28 @@ public class Main {
         double[][] dois = {{0,14,22},{250,2,4},{-460,-5,-8},{40,1,0}};
         Matrix m = new Matrix(dois);
         Simplex s = new Simplex(matrix);
-        //System.out.println(s.runSimplexForSimplex().getMatrix());
-
         BranchBound bb = new BranchBound(s);
-        bb.runBranchBound();
+        Simplex simp = bb.runBranchBound();
 
+        String[] solution = simp.runSimplexForResult().split("@");
 
-/*        String[] solution = s.runSimplexForResult().split("@");
+/*        String[] solution = s.runSimplexForResult().split("@");*/
         int solutionSize = solution.length;
 
         for (int i = 0; i < solutionSize; i++) {
             System.out.println(solution[i]);
-        }*/
+        }
+
+        solution = s.runSimplexForResult().split("@");
+
+        solutionSize = solution.length;
+
+        for (int i = 0; i < solutionSize; i++) {
+            System.out.println(solution[i]);
+        }
     }
 
     public static void main(String[] args) {
-        transfer(500,500,2,3,5,1);
+        transfer(25,500,2,5,4,0);
     }
 }
